@@ -57,6 +57,7 @@ useEffect(()=>{
     }
 
     const handleTouchMove = (event) => {
+      event.preventDefault();
       const touch = event.touches[0]; // Captura el primer dedo
       if (touch) {
         setPosition({ x: touch.clientX, y: touch.clientY });
@@ -67,7 +68,7 @@ useEffect(()=>{
     //dentro del efecto, añade un addEventListener al window para cuando se mueve el ratón
     //solo si el estado enabled es true
     window.addEventListener('pointermove', handleMove)
-    window.addEventListener("touchmove", handleTouchMove);
+    window.addEventListener("touchmove", handleTouchMove, {passive: false});
   }
 
   //el problema es que aunque le demos al boton desactivar seguir al ratón, el evento sigue suscripto
