@@ -56,10 +56,18 @@ useEffect(()=>{
       setPosition({ x: clientX, y: clientY })
     }
 
+    const handleTouchMove = (event) => {
+      const touch = event.touches[0]; // Captura el primer dedo
+      if (touch) {
+        setPosition({ x: touch.clientX, y: touch.clientY });
+      }
+    };
+
     if(enabled) {
     //dentro del efecto, añade un addEventListener al window para cuando se mueve el ratón
     //solo si el estado enabled es true
     window.addEventListener('pointermove', handleMove)
+    window.addEventListener("touchmove", handleTouchMove);
   }
 
   //el problema es que aunque le demos al boton desactivar seguir al ratón, el evento sigue suscripto
@@ -67,6 +75,7 @@ useEffect(()=>{
   //esto se ejecuta siempre que se desmonte el componente y cada vez que cambie la dependencia
   return()=>{
     window.removeEventListener('pointermove', handleMove)
+    window.removeEventListener("touchmove", handleTouchMove);
   }
 
   }, [enabled])
