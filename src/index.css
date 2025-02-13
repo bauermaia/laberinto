@@ -100,10 +100,30 @@ div.cursor {
 }
 
 .modal {
-  text-align: center;
-  border-radius: 25px;
-  background-color:rgba(255, 255, 255, 0.87);
-  color: black;
-  font-size: 20px;
-  padding: 10px;
+
+    position: fixed; /* Fija la posición en la pantalla */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Centra el modal */
+    text-align: center;
+    border-radius: 25px;
+    background-color: rgba(255, 255, 255, 0.5);
+    color: black;
+    font-size: 20px;
+    padding: 10px;
+
+  
 }
+
+.modal-text{
+  background: transparent;
+  height:   200px;
+  width:  200px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+

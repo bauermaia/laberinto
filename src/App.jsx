@@ -8,8 +8,16 @@ function App() {
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1],
     [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1],
     [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
+    [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
+    [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
+    [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
+    [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
+    [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
+    [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
+    [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
     [1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1],
-    [1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1]  
+    [1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+
   ]
 
   const [meta, setMeta]= useState(false)
@@ -65,26 +73,39 @@ useEffect(()=>{
 
   //crea otro efecto para detectar si se perdió
 
-  useEffect(()=>{
-    const row = Math.floor((position.y - offset.y) / cellSize);
-    const col = Math.floor((position.x - offset.x) / cellSize);
-
-    if(
-      row >= 0 &&
-      row < mazeData.length &&
-      col >= 0 &&
-      col < mazeData[0].length) 
-      {
-      if( mazeData[row][col] === 1) {
+  useEffect(() => {
+    const roundedOffsetX = Math.round(offset.x);
+    const roundedOffsetY = Math.round(offset.y);
+    const roundedCellSize = Math.round(cellSize); // Aseguramos que cellSize sea un número entero
+  
+    // Cálculo de la celda
+    const row = Math.floor((position.y - roundedOffsetY) / roundedCellSize);
+    const col = Math.floor((position.x - roundedOffsetX) / roundedCellSize);
+  
+    
+  
+    if (
+      row >= 0 && row < mazeData.length &&
+      col >= 0 && col < mazeData[0].length
+    ) {
+      if (mazeData[row][col] === 1) {
+        // 🚀 Nueva condición: Ignorar colisión si el cursor acaba de entrar en una nueva celda
+        const pixelInsideCellY = (position.y - roundedOffsetY) % roundedCellSize;
+        if (pixelInsideCellY < 5) {
+          return;
+        }
+  
+       
         setEnabled(false);
-        setModalMessage("Inténtalo de nuevo, has chocado con una pared" + "🤦");
+        setModalMessage("Inténtalo de nuevo, has chocado con una pared 🤦");
         setShowModal(true);
-      } else  {
+      } else {
         setValidPath(true);
       }
     }
-  }, [position, offset]) //se actualiza cuando cambia la posicion o el offset
-
+  }, [position, offset]);
+  
+  
 
   //inicia el juego
   const handleButtonClick = () => {
@@ -92,6 +113,7 @@ useEffect(()=>{
     setMeta(false)
     setShowModal(false);  
     setValidPath(false);
+     
   }
   
 
@@ -102,9 +124,10 @@ useEffect(()=>{
       setModalMessage("¡Felicidades, has llegado a la meta! 🎉");
       setShowModal(true);
       setEnabled(false);
-      setTimeout(() => {
-        setPosition({ x: 600, y: 431 });
-      }, 10);
+      // Retrasar la reposición del puntero fuera del tablero
+    setTimeout(() => {
+      setPosition({ x: offset.x - 50, y: offset.y - 100 });
+    }, 200); 
     }
   }  
 
@@ -149,7 +172,7 @@ useEffect(()=>{
 
      {showModal && (
         <div className="modal">
-          <p>{modalMessage}</p>
+          <p className="modal-text">{modalMessage}</p>
         </div>
       )}   
 
